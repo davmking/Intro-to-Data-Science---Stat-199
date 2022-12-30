@@ -1,0 +1,276 @@
+---
+title: 'AE 12: Conditional Probability'
+author: "Dav King"
+date: "2/15/2022"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(knitr)
+```
+
+```{r load-data}
+sta199 <- read_csv("sta199-fa21-year-major.csv")
+```
+
+
+## Learning goals
+
+-   Define marginal, joint, and conditional probabilities, and calculate each "manually" and in a reproducible way
+-   Identify whether two events are independent
+-   Apply Bayes' theorem using the Hypothetical 10,000
+
+## Coming Up
+
+- Lab 5 due Friday.
+- Homework 3 assigned Thursday.
+- Prep Quiz Due by 11:59 PM today
+
+## Definitions
+
+Let A and B be events.
+
+-   **Marginal probability:** The probability an event occurs regardless of values of the other event
+  - *P(A)* or *P(B)*
+
+-   **Joint probability**: The probability two or more simultaneously occur
+  - *P(A and B)* 
+  
+-   **Conditional probability**: The probability an event occurs given the other has occurred
+  - *P(A|B)* or *P(B|A)*
+
+-   **Independent events**: Knowing one event has occurred does not lead to any change in the probability we assign to another event.
+  - *P(A|B) = P(A)* or *P(B|A) = P(B)*
+
+## Part 1: STA 199 years & majors
+
+For this portion of the AE, we will continue using the data including the year in school and majors for students taking STA 199 in Fall 2021, i.e., you! The data set includes the following variables:
+
+-   `section`: STA 199 section
+-   `year`: Year in school
+-   `major_category`: Major / academic interest.
+    -   For the purposes of this AE, we'll call this the student's "major".
+
+Let's start with the contingency table from the last class:
+
+```{r pivot-wider}
+sta199 %>% 
+  count(year, major_category) %>%
+  pivot_wider(id_cols = c(year, major_category),#how we identify unique obs
+              names_from = major_category, #how we will name the columns
+              values_from = n, #values used for each cell
+              values_fill = 0) %>% #how to fill cells with 0 observations 
+  kable() # neatly display the results
+```
+
+Try to answer the questions below using the contingency table and using code to answer in a reproducible way.
+
+**Part A:** What is the probability a randomly selected STA 199 student is studying a subject in the "other" major category?
+
+```{r prob-other-major}
+sta199 %>% 
+  count(major_category) %>% 
+  mutate(pMajor = n/sum(n))
+```
+
+0.397
+
+**Part B**: What is the probability a randomly selected STA 199 student is a first-year?
+
+```{r ex1-part-b}
+sta199 %>% 
+  count(year) %>% 
+  mutate(pYear = n/sum(n))
+```
+
+0.457
+
+**Part C**: What is the probability a randomly selected STA 199 student is a first year and is studying a subject in the "other" major category?
+
+```{r ex1-part-c}
+sta199 %>% 
+  mutate(frosh_other = if_else(
+    year == "First-year" & major_category == "other", 1, 0)) %>% 
+  summarize(prop_frosh_other = mean(frosh_other))
+```
+
+**Part D**: What is the probability a randomly selected STA 199 student is a first year given they are studying a subject in the "other" major category?
+
+```{r ex1-part-d}
+sta199 %>% 
+  filter(major_category == "other") %>% 
+  count(year) %>% 
+  mutate(prop_year_other = n/sum(n))
+```
+0.398
+
+**Part E**: What is the probability a randomly selected STA 199 student is studying a subject in the "other" major category given they are a first-year?
+
+```{r ex1-part-e}
+sta199 %>% 
+  filter(year == "First-year") %>% 
+  count(major_category) %>% 
+  mutate(prop_other_firstyear = n/sum(n))
+```
+0.345
+
+**Part F**: Are being a first-year and studying a subject in the "other"
+category independent events? Briefly explain.
+
+No. If they were independent events, then P(A) should = P(A|B) and P(B) should =
+P(B|A). However, the probability of a student studying an "other" major is 
+0.397, while that proportion within first years is 0.345. Though we don't need 
+more evidence, the proportion of 1st years is 0.457, but the proportion of 1st 
+years within the "other" major category is 0.398. Since these probabilities are 
+not equal, we cannot treat them as independent. Similarly, and our best test for
+independence, P(A & B) should = P(A) x P(B). P(A & B) = 0.158, but P(A) x P(B) =
+0.181, a very different number that rejects the possibility of independence.
+
+## Part 2: Bayes' Theorem
+
+### Monty Hall Problem:
+
+A Video: https://brilliant.org/wiki/monty-hall-problem/.
+
+“Suppose you’re on a game show, and you’re given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what’s behind the doors, opens another door, say No. 3, which has a goat. He then says to you,”Do you want to pick door No. 2?" Is it to your advantage to switch your choice?"
+
+We will investigate the above decision of whether to switch or not to switch.
+
+Assumptions:
+
+The host will always open a door not picked by the contestant.
+
+The host will always open a door which reveals a goat (i.e. not a car).
+
+The host will always offer the contestant the chance to switch to another door.
+
+The door behind which the car is placed is chosen at random.
+
+The door initially chosen by the contestant is chosen at random.
+
+```{r doors}
+doors <- c(1, 2, 3)
+```
+
+```{r monty}
+monty_hall <- tibble(
+  car_door = sample(doors, size = 10000, replace = TRUE),
+  my_door = sample(doors, size = 10000, replace = TRUE)
+  )
+monty_hall
+```
+
+```{r monty2}
+monty_hall <- monty_hall %>% 
+  rowwise() %>% 
+  mutate(monty_door = if_else(car_door == my_door,
+                              sample(doors[-my_door], size = 1),
+                              6 - (car_door + my_door))) %>% 
+  ungroup()
+monty_hall
+```
+
+```{r monty3}
+monty_hall <- monty_hall %>% 
+  mutate(switch_win = car_door != my_door,
+         stay_win   = car_door == my_door)
+monty_hall
+```
+
+```{r monty4}
+monty_hall %>% 
+  summarise(switch_win_prob = mean(switch_win),
+            stay_win_prob   = mean(stay_win))
+```
+
+
+## Some Practice using the Hypothetical 10,000
+
+The global coronavirus pandemic illustrates the need for accurate testing of COVID-19, as its extreme infectivity poses a significant public health threat. Due to the time-sensitive nature of the situation, the FDA enacted emergency authorization of a number of serological tests for COVID-19 in 2020. Full details of these tests may be found on its website [here](https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/eua-authorized-serology-test-performance).
+
+We will define the following events:
+
+-   **Pos**: The event the Alinity test returns positive.
+-   **Neg**: The event the Alinity test returns negative.
+-   **Covid**: The event a person has COVID
+-   **No Covid**: The event a person does not have COVID
+
+The Abbott Alinity test has an estimated sensitivity of 100%, *P(Pos \| Covid) = 1*, and specificity of 99%, *P(Neg \| No Covid) = 0.99*.
+
+Suppose the prevalence of COVID-19 in the general population is about 2%, *P(Covid) = 0.02*.
+
+Bayes Theorem and the [Hypothetical 10,000](https://sphweb.bumc.bu.edu/otlt/mph-modules/bs/bs704_probability/bs704_probability6.html).
+
+**Part A**: Use the Hypothetical 10,000 to calculate the probability a person has COVID given they get a positive test result, i.e. *P(Covid | Pos)*.
+
+|           | Covid | No Covid | Total |
+|-----------|-------|----------|-------|
+| **Pos**   |       |          |       |
+| **Neg**   |       |          |       |
+| **Total** |       |          | 10000 |
+
+```{r prac-01}
+covid <- c(1:100)
+
+covid_table <- tibble(
+  patient = sample(covid, size = 10000, replace = T),
+  test = sample(covid, size = 10000, replace = T)
+)
+covid_table
+```
+
+```{r prac_01-2}
+covid_table2 <- covid_table %>% 
+  mutate(cov_status = if_else(patient > 2, "No Covid", "Covid")) %>% 
+  mutate(test_spec = case_when(
+    cov_status == "No Covid" & test == 1 ~ "Positive",
+    cov_status == "Covid" ~ "Positive",
+    T ~ "Negative"
+  )) 
+
+covid_table2 %>% 
+  count(cov_status, test_spec) %>% 
+  pivot_wider(id_cols = c(cov_status, test_spec),
+              names_from = cov_status, values_from = n, values_fill = 0) %>% 
+  kable()
+
+covid_table2 %>% 
+  mutate(outcome = case_when(
+   cov_status == "Covid" & test_spec == "Positive" ~ "hit",
+   cov_status == "Covid" & test_spec == "Negative" ~ "miss",
+   cov_status == "No Covid" & test_spec == "Positive" ~ "false positive",
+   cov_status == "No Covid" & test_spec == "Negative" ~ "correct reject")) %>% 
+  count(outcome) %>% 
+  mutate(prob_outcome = n/sum(n)) %>% 
+  filter(outcome == "false positive" | outcome == "hit") %>% 
+  mutate(population = sum(n)) %>% 
+  filter(outcome == "hit") %>% 
+  summarize(answer = n/population)
+```
+
+Note: I am aware a) that I didn't have to do this in code and b) that I couldn't
+figure out how to make it sum the totals (I tried hard, and would appreciate 
+advice if anybody reads this). This is clunky code, but my reproducible answer 
+is given above.
+
+**Part B:** Use Bayes' Theorem to calculate *P(Covid|Pos)*. 
+
+```{r prac_02}
+covid_table2 %>% 
+  mutate(pos = if_else(cov_status == "No Covid", 0, 1)) %>% 
+  mutate(testPos = if_else(test_spec == "Positive", 1, 0)) %>% 
+  mutate(pPos = mean(pos)) %>% 
+  mutate(pTestPos = mean(testPos)) %>% 
+  filter(pos == 1) %>% 
+  mutate(pPosGivenCovid = mean(testPos)) %>% 
+  summarize(answer = (pPosGivenCovid * pPos)/pTestPos)
+```
