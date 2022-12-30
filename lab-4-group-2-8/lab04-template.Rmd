@@ -1,0 +1,106 @@
+---
+title: "Lab 04"
+subtitle: "due [date] 11:59 PM "
+author: "Group 2-8: Dav King, Eesha Yaqub, Vivian Zhang, Reesey Du Pont"
+editor_options: 
+  chunk_output_type: console
+output:
+  pdf_document: default
+---
+
+```{r load-packages, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(sf)
+``` 
+
+```{r load-data, message = FALSE}
+states <- st_read("cb_2020_us_state_20m.shp", quiet = TRUE)
+census <- read_csv("census_2020_lower48.csv")
+head(states)
+head(census)
+```
+
+# Exercise 1
+
+Be respectful of everyone's opinions. Attend group meetings. Complete all of the
+work you're supposed to get through.
+
+# Exercise 2
+```{r create_data}
+census_data <- states %>%
+  full_join(census, by = c("STUSPS" = "state")) %>%
+  filter(STUSPS != "AK" & STUSPS != "HI" & STUSPS != "PR")
+```
+
+Use the proper join to create the `census_data` data set and please remember to name your chunk.
+
+# Exercise 3
+
+```{r us-plot-1}
+ggplot(census_data) +
+  geom_sf(aes(fill = pop_2020)) +
+  labs(title = "2020 population data by state",
+       subtitle ="sorted by raw population", fill = "2020 population" ) +
+  theme_bw() +
+  scale_fill_gradient2()
+```
+
+# Exercise 4
+
+```{r new_var}
+census_data <- census_data %>%
+  mutate(pop_change = (pop_2020 - pop_2010)/pop_2010)
+```
+
+# Exercise 5
+
+```{r us-plot-2}
+ggplot(census_data) +
+  geom_sf(aes(fill = pop_change)) + 
+  scale_fill_gradient2(low = "red", high = "green", midpoint = 0) + 
+  labs(title = "Change in Population from 2010 to 2020",
+       fill = "Percent Population Change")
+```
+
+West Virginia had a net loss of population. The West seems to have generally 
+experienced fairly significant population gain, while the area around the 
+Mississippi River and the Northeast seems to have remained fairly stagnant 
+in terms of population change. 
+
+# Exercise 6
+
+```{r us-plot-3}
+census_data %>%
+  mutate(seat_change_2010 = seats_2020 - seats_2010) %>%
+ggplot(.) +
+  geom_sf(aes(fill = seat_change_2010 )) +
+  scale_fill_gradient2(low = "red", high = "green", midpoint = 0) + 
+  labs(title = "Seat change by state", subtitle = "from 2010 to 2020",
+       fill = "Seat change ")
+```
+
+The majority of states didn't experience a seat change. A cluster of states in the midwest experienced a loss in seats, and also California. 6 states experienced an increase in seat numbers. 
+
+
+# Exercise 7
+
+```{r us-plot-4}
+census_data %>%
+  mutate(seat_change_1910 = seats_2020 - seats_1910) %>%
+ggplot(.) +
+  geom_sf(aes(fill = seat_change_1910)) +
+  scale_fill_gradient2(low = "red", high = "green", midpoint = 0) +
+  labs(title = "Change in Apportioned Seats by State",
+       subtitle = "From 1910 to 2020", fill = "Change in Seats") +
+  theme_bw()
+```
+
+Given that the geographic distribution of the US has changed drastically over 
+the past 110 years but that the number of Representatives in the House has 
+remained fixed over that same time period, the trend in seats clearly reflects 
+population shift patterns. In the Northeast and Midwest (and to an extent, parts
+of the Deep South), seats were lost - especially in former colonial powerhouses 
+Pennsylvania and New York, which are both still large but less so in terms of 
+relative size compared to where they were 100 years ago. In much of the West, 
+states gained a lot of seats - with the largest gains in California, Texas, and 
+Florida (which isn't the West, admittedly).

@@ -1,0 +1,87 @@
+---
+title: "Lab 01 - Hello R!"
+subtitle: "due January 10, 2021 at 11:59 PM "
+author: "Dav King"
+date: "1/5/22"
+editor_options: 
+  chunk_output_type: console
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Load Packages
+
+```{r load-packages, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(datasauRus)
+``` 
+
+# Exercise 1
+
+Type your answer to exercise #1 here. Note this exercise doesn't require any
+R code. 
+
+Note also in this lab we are telling you exactly when to stage, commit, and
+push.
+
+the data frame has 1846 rows and 3 variables (columns).
+Variables: `dataset` (indicates which dataset the data are from), `x` (x-values), and `y` (y-values)
+
+# Exercise 2
+
+This filters the data set to only values where dataset has the value "dino", and plots the x-y dot plot of that filter data set.
+```{r plot-dino, fig.height = 4, fig.width = 4}
+dino_data <- datasaurus_dozen %>%
+  filter(dataset == "dino")
+ggplot(data = dino_data, mapping = aes(x = x, y = y)) + 
+  geom_point()
+```
+
+Thus calculates the correlation coefficient, r = -0.0645
+```{r cor-dino}
+dino_data %>%
+  summarize(r = cor(x, y))
+```
+
+# Exercise 3
+
+This filters the data frame to only values where dataset == "star", and plots y against x for that dataset.
+
+```{r plot-star, fig.height = 4, fig.width= 4}
+star_data <- datasaurus_dozen %>%
+  filter(dataset == "star")
+ggplot(data = star_data, mapping = aes(x = x, y = y)) +
+  geom_point()
+```
+
+Note: the instructions say star on sakai but circle in the rmd file; to use circle with as few changes as possible the second line of this code would be changed to "  filter(dataset == "circle")", which I am not denoting in R code because it renders a massive, unnecessary data table.
+
+
+This calculates the correlation coefficient of the star data set.
+
+```{r cor-star}
+star_data %>%
+  summarize(r = cor(x,y))
+```
+
+The correlation is -0.0630, which is a slightly weaker negative correlation than for the dino set but once again largely meaningless as a linear relationship.
+
+
+# Exercise 4
+```{r plot-all-datasets, fig.height = 6, fig.width = 8}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset))+
+  geom_point()+
+  facet_wrap(~ dataset, ncol = 3) +
+  theme(legend.position = "none")
+```
+
+All plots have a distinct shape, based upon their according names.
+
+```{r cor-all-datsets}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y))
+```
+
+Despite a wide variety in the shapes of these data sets, they all have a correlation of -0.07 < r < -0.06. This is especially noteworthy, as these data are so unlike one another (in fact, the slant_down and slant_up datasets are almost complete opposites conceptually), and r-values this similar should not occur randomly - suggesting that the data were designed for this principle, and perhaps explaining why only the dino file is particularly well drawn and free of errors in its image compared to the rest of the datasets.

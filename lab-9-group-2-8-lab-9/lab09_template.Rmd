@@ -1,0 +1,119 @@
+---
+title: "Lab 09"
+author: 'Group 2-8: Dav King, Vivian Zhang, Reesey Du Pont, Eesha Yaqub'
+subtitle: 'Due April 15 at 11:59 PM'
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE)
+```
+
+
+```{r load-packages}
+library(tidyverse)
+library(tidymodels)
+library(knitr)
+library(viridis)
+```
+
+```{r load-data}
+parkinsons = read_csv("parkinsons.csv")
+```
+
+
+# Exercise 1
+
+```{r rm-underscore}
+park = parkinsons %>%
+  mutate(name = str_remove_all(name, "_[^_]+$"))
+```
+
+```{r ex-1}
+park %>% 
+  filter(status == 0) %>%
+  select(name) %>% 
+  unique() %>% 
+  kable()
+```
+
+# Exercise 2
+
+```{r ex-2}
+test <- park %>% 
+  group_by(status) %>% 
+  arrange(name) %>% 
+  slice(1:24) %>% 
+  ungroup()
+nrow(test)
+train <- park %>% 
+  group_by(status) %>% 
+  arrange(name) %>% 
+  slice(-c(1:24)) %>% 
+  ungroup()
+nrow(train)
+```
+
+# Exercise 3
+
+```{r ex-3}
+park %>%
+  mutate(PD_status = ifelse(status == 0, "healthy", "PD")) %>%
+  ggplot(mapping = aes(x = HNR, y = shimmer, color = PD_status)) + 
+  geom_point() + 
+  labs(x = "HNR", y = "Variation in Amplitude (dB)", 
+       title = "Relationship Between HNR and Variation in Amplitude (dB)") + 
+  scale_color_viridis(discrete = TRUE, option = "D", name = "PD Status")
+```
+
+We observe a non-linear, negative correlation overall between HNR and 
+amplitude variance. More specifically, those with PD had a larger range in 
+amplitude variance, while the amplitude variance of healthy individuals was more 
+clustered at lower values. Similarly, no healthy participant had an HNR lower 
+than 17.5, while participants with PD had HNR values getting even lower than 10.
+
+# Exercise 4
+```{r ex-4}
+fit_1 <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(as.factor(status) ~ HNR + PPE + jitter + shimmer,
+      data = train, family = "binomial")
+tidy(fit_1)
+```
+
+There are three predictors that are significant at the alpha = 0.05 level: 
+HNR, PPE, and shimmer. All three of these predictors are significant because
+their p-value levels are less than alpha = 0.05. 
+
+# Exercise 5
+
+```{r ex-5}
+prediction = predict(fit_1, test, type = "prob")
+test_result = test %>% 
+  mutate(predicted_prob_pd = prediction$.pred_1) %>% 
+  mutate(prob_50 = if_else(predicted_prob_pd > 0.5, 1, 0)) %>% 
+  mutate(prob_75 = if_else(predicted_prob_pd > .75, 1, 0)) %>% 
+  mutate(prob_90 = if_else(predicted_prob_pd > .9, 1, 0))
+test_result %>% 
+  count(status, prob_50)
+test_result %>% 
+  count(status, prob_75)
+test_result %>% 
+  count(status, prob_90)
+```
+
+With a decision boundary of 50%, our model yields 14 false positives and 0 false
+negatives. With a decision boundary of 75%, our model yields 2 false positives 
+and 1 false negative. With a decision boundary of 90%, our model yields 0 false 
+positives and 7 false negatives.
+
+Using this model as a diagnostic tool for PD, we would want to use the 75% 
+boundary. Though it was the only level to have both false positives and false 
+negatives, it also had the fewest incorrect measures overall - thus, it is the 
+most accurate threshold.

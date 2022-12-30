@@ -1,0 +1,63 @@
+---
+title: 'Homework 05: Paint a plot, pick a package'
+author: 'Dav King'
+date: "April 14, 2022"
+output:
+  pdf_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE)
+```
+
+## Load packages & data
+
+```{r load-packages-data}
+library(tidyverse)
+library(nflreadr)
+library(ggridges)
+``` 
+
+
+## Exercise 1
+
+```{r ex-1, fig.height = 3, fig.width = 6}
+iris %>% 
+  ggplot(aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+  geom_point(aes(size = Sepal.Width, alpha = Petal.Width)) +
+  scale_x_log10() +
+  scale_y_time() +
+  geom_path(size = 2) +
+  geom_dotplot(aes(y = Species)) +
+  geom_violin() +
+  theme(panel.background = element_rect(fill = "hotpink", color = "hotpink"),
+        panel.grid.major = element_line(color = "#BF5700", size = 2),
+        panel.grid.minor = element_line(color = "#39FF14"))
+```
+
+## Exercise 2
+
+This package is called `nflreadr`, which is hosted on CRAN. The packages enables
+people to read nflverse data, essentially giving them access to all of the 
+play-by-play data from each recorded NFL season alongside draft picks, contract 
+information and much much more. With this package, I was able to download the 
+play-by-play information for the complete 2021 NFL season and make a graphic of 
+the relative density of each type of play depending on how much time was left in
+the half (or overtime). 
+
+```{r ex-2, fig.height = 10}
+df <- load_pbp(2021)
+df %>% 
+  filter(!is.na(play_type)) %>% 
+  ggplot(aes(x = half_seconds_remaining, y = play_type, fill = play_type)) +
+  geom_density_ridges(alpha = 0.5) +
+  scale_x_reverse() +
+  facet_wrap(~ game_half, ncol = 1) +
+  theme_bw() +
+  guides(fill = "none") +
+  labs(title = "When do Different NFL Plays Happen?", x = "Seconds Remaining",
+       y = "Type of Play") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+

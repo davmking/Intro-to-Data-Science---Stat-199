@@ -1,0 +1,339 @@
+---
+title: "creating_gap_data"
+author: "Dav King"
+date: "2/23/2022"
+output: pdf_document
+---
+
+Note: gapminder does not enable an aggregate downloading of their data. Thus, I
+have built out a dataset here. My apologies for not iterating my development on 
+github, but given that this was not technically a part of the assignment, I 
+don't think it's a major issue. I have left definitions for each variable in 
+comments where they are created. Ultimately the dataset is built and stored as 
+an Rdata file named `gap`.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library}
+library(tidyverse)
+```
+
+```{r build-educ-data, message = F}
+men_15_24 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_15_to_24_years.csv")
+men_25_34 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_25_to_34_years.csv")
+men_35_44 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_35_to_44_years.csv")
+men_45_54 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_45_to_54_years.csv")
+men_55_64 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_55_to_64_years.csv")
+men_65_plus <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_men_65_plus_years.csv")
+women_15_24 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_15_to_24_years.csv")
+women_25_34 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_25_to_34_years.csv")
+women_35_44 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_35_to_44_years.csv")
+women_45_54 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_45_to_54_years.csv")
+women_55_64 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_55_to_64_years.csv")
+women_65_plus <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_65_plus_years.csv")
+
+ed <- function(edData){
+  edData %>% 
+    pivot_longer(
+      cols = !ï..country,
+    names_to = "year",
+    values_to = "ed"
+    ) 
+}
+
+men_15_24 <- ed(men_15_24)
+men_25_34 <- ed(men_25_34)
+men_35_44 <- ed(men_35_44)
+men_45_54 <- ed(men_45_54)
+men_55_64 <- ed(men_55_64)
+men_65_plus <- ed(men_65_plus)
+women_15_24 <- ed(women_15_24)
+women_25_34 <- ed(women_25_34)
+women_35_44 <- ed(women_35_44)
+women_45_54 <- ed(women_45_54)
+women_55_64 <- ed(women_55_64)
+women_65_plus <- ed(women_65_plus)
+
+#All consider mean years of schooling, separated by age group and sex
+educ <- men_15_24 %>% 
+  full_join(men_25_34, by = c("ï..country", "year")) %>% 
+  full_join(men_35_44, by = c("ï..country", "year")) %>% 
+  full_join(men_45_54, by = c("ï..country", "year")) %>% 
+  full_join(men_55_64, by = c("ï..country", "year")) %>% 
+  full_join(men_65_plus, by = c("ï..country", "year")) %>% 
+  full_join(women_15_24, by = c("ï..country", "year")) %>%
+  full_join(women_25_34, by = c("ï..country", "year")) %>%
+  full_join(women_35_44, by = c("ï..country", "year")) %>%
+  full_join(women_45_54, by = c("ï..country", "year")) %>%
+  full_join(women_55_64, by = c("ï..country", "year")) %>%
+  full_join(women_65_plus, by = c("ï..country", "year"))
+
+names(educ) <- c("country", "year", "ed_men_15_24", "ed_men_25_34", 
+                 "ed_men_35_44", "ed_men_45_54", "ed_men_55_64",
+                 "ed_men_65_plus", "ed_women_15_24", "ed_women_25_34",
+                 "ed_women_35_44", "ed_women_45_54",
+                 "ed_women_55_64", "ed_women_65_plus")
+```
+
+```{r hdi-element-data, message = F}
+hdi <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/hdi_human_development_index.csv")
+#Human development index score
+hdi <- hdi %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "hdi"
+  )
+
+life_exp_birth <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/life_expectancy_years.csv")
+#Mean years expected at birth
+life_exp_birth <- life_exp_birth %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "life_exp_birth"
+  )
+
+gnipercap_ppp <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/gnipercapita_ppp_current_international.csv")
+#GNI Per Capita, PPP, current international $
+gnipercap_ppp <- gnipercap_ppp %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "gnipercap_ppp"
+  )
+```
+
+```{r major-indicators}
+co2_emissions <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/co2_emissions_tonnes_per_person.csv")
+#CO2 emissions, metric tonnes per person
+co2_emissions <- co2_emissions %>% 
+  select(-X1829, -X1830, -X1831, -X1832) %>% 
+  #note: this fixes issue with non-numeric values
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "co2_emissions"
+  )
+
+child_mortality <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/child_mortality_0_5_year_olds_dying_per_1000_born.csv")
+#Deaths of children under 5 years per 1,000 live births
+child_mortality <- child_mortality %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "child_mortality"
+  )
+
+pop <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/population_total.csv")
+#Total Population
+#Note: this absolutely foul data will need serious transformation before it can
+#be used, idk what Gapminder was thinking
+pop <- pop %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "pop"
+  )
+
+gini <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/gini.csv")
+#gini coefficient of wealth inequality
+gini <- gini %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "gini"
+  )
+
+poverty <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/number_of_people_in_poverty.csv")
+#Number of poor population, in millions, living on less than $1.25/day at 2005
+#international prices
+poverty <- poverty %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "poverty"
+  )
+```
+
+```{r communication-data}
+cell_phones_per_100 <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/cell_phones_per_100_people.csv")
+#Cell phones per 100 people
+cell_phones_per_100$X1986[36] <- NA
+cell_phones_per_100$X1986 <- as.double(cell_phones_per_100$X1986)
+#Note: remove one non-numeric value
+cell_phones_per_100 <- cell_phones_per_100 %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "cell_phones_per_100"
+  )
+
+pct_not_using_internet <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/non_net_users_prc.csv")
+#Percentage of people not using the internet in the last 3 months
+pct_not_using_internet <- pct_not_using_internet %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "pct_not_using_internet"
+  )
+
+journalists_killed <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/journakilled.csv")
+#Number of journalists killed in a year
+journalists_killed <- journalists_killed %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "journalists_killed"
+  )
+```
+
+```{r other-education-data}
+ed_gender_ratio <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/mean_years_in_school_women_percent_men_25_to_34_years.csv")
+#ratio of female to male number of years in school, 25-34 year olds
+ed_gender_ratio <- ed_gender_ratio %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "ed_gender_ratio"
+  )
+
+literacy_rate <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/literacy_rate_adult_total_percent_of_people_ages_15_and_above.csv")
+#Literacy rate, age 15+
+literacy_rate <- literacy_rate %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "literacy_rate"
+  )
+
+primary_school_comp <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/primary_completion_rate_total_percent_of_relevant_age_group.csv")
+#Primary school completion rate
+primary_school_comp <- primary_school_comp %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "primary_school_comp"
+  )
+
+primary_student_spending <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/expenditure_per_student_primary_percent_of_gdp_per_person.csv")
+#Government expenditure per primary school student, as a percentage of GDP
+#per capita
+primary_student_spending <- primary_student_spending %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "primary_student_spending"
+  )
+```
+
+```{r health-data}
+antivax <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/vccin_sfty_dag.csv")
+#Percentage of people who disagree that vaccines are safe for children to have
+antivax <- antivax %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "antivax"
+  )
+
+health_spending <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/total_health_spending_per_person_us.csv")
+#Average health expenditure per person, in USD, using average exchange rate
+health_spending <- health_spending %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "health_spending"
+  )
+```
+
+```{r population-data}
+median_age <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/median_age_years.csv")
+#Median age of the total population, in years
+median_age <- median_age %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "median_age"
+  )
+
+pop_dens <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/population_density_per_square_km.csv")
+#People per square kilometer
+pop_dens <- pop_dens %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "pop_dens"
+  )
+
+urban_pop <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/urban_population_percent_of_total.csv")
+#Percentage of people living in urban areas (defined by national statistical
+#offices)
+urban_pop <- urban_pop %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "urban_pop"
+  )
+
+urban_pop_growth <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/urban_population_growth_annual_percent.csv")
+#Percentage of people living in urban areas, annual % growth
+urban_pop_growth <- urban_pop_growth %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "urban_pop_growth"
+  )
+
+first_marriage_age <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/age_at_1st_marriage_women.csv")
+#Mean age of first marriage for women
+first_marriage_age <- first_marriage_age %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "first_marriage_age"
+  )
+
+babies_per_woman <- read.csv("~/Stat 199/project-spring-2022-group-2-8-project/data/children_per_woman_total_fertility.csv")
+#Fertility rate: the number of children that would be born to each woman with
+#prevailing age-specific fertility rates
+babies_per_woman <- babies_per_woman %>% 
+  pivot_longer(
+    cols = !ï..country,
+    names_to = "year",
+    values_to = "babies_per_woman"
+  )
+```
+
+```{r full-dataset}
+gap <- hdi %>% 
+  full_join(pop, by = c("ï..country", "year")) %>%
+  full_join(median_age, by = c("ï..country", "year")) %>% 
+  full_join(life_exp_birth, by = c("ï..country", "year")) %>% 
+  full_join(pop_dens, by = c("ï..country", "year")) %>%
+  full_join(educ, by = c("ï..country" = "country", "year")) %>% 
+  full_join(gnipercap_ppp, by = c("ï..country", "year")) %>% 
+  full_join(co2_emissions, by = c("ï..country", "year")) %>%
+  full_join(child_mortality, by = c("ï..country", "year")) %>%
+  full_join(gini, by = c("ï..country", "year")) %>%
+  full_join(poverty, by = c("ï..country", "year")) %>%
+  full_join(cell_phones_per_100, by = c("ï..country", "year")) %>% 
+  full_join(pct_not_using_internet, by = c("ï..country", "year")) %>%
+  full_join(journalists_killed, by = c("ï..country", "year")) %>%
+  full_join(ed_gender_ratio, by = c("ï..country", "year")) %>% 
+  full_join(literacy_rate, by = c("ï..country", "year")) %>% 
+  full_join(primary_school_comp, by = c("ï..country", "year")) %>% 
+  full_join(primary_student_spending, by = c("ï..country", "year")) %>%
+  full_join(antivax, by = c("ï..country", "year")) %>%
+  full_join(health_spending, by = c("ï..country", "year")) %>%
+  full_join(urban_pop, by = c("ï..country", "year")) %>%
+  full_join(urban_pop_growth, by = c("ï..country", "year")) %>%
+  full_join(first_marriage_age, by = c("ï..country", "year")) %>%
+  full_join(babies_per_woman, by = c("ï..country", "year")) %>%
+  arrange(ï..country, year)
+gap
+
+save(gap, file = "gap.Rdata")
+```
