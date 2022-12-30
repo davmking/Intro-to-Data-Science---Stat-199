@@ -1,0 +1,371 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Flint Water Crisis}
+\author{Dav King}
+\date{1/11/2022}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Flint Water Crisis},
+  pdfauthor={Dav King},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+The data set consists of 271 homes sampled with three water lead
+contaminant values at designated time points. The lead content is in
+parts per billion (ppb). Additionally, some location data is given about
+each home.
+
+\hypertarget{packages}{%
+\subsection{Packages}\label{packages}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data}{%
+\subsection{Data}\label{data}}
+
+To get started, read in the \texttt{flint.csv} file using the function
+\texttt{read\_csv}. First, use the Upload button under Files.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"flint.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+In this file, there are five variables:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{id}: sample ID number
+\item
+  \textbf{zip}: ZIP code in Flint of the sample's location
+\item
+  \textbf{ward}: ward in Flint of the sample's location
+\item
+  \textbf{draw}: which time point the water was sampled from
+\item
+  \textbf{lead}: lead content in parts per billion
+\end{itemize}
+
+Let's preview the data with the \texttt{glimpse()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(flint)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 813
+## Columns: 5
+## $ id   <dbl> 1, 2, 4, 5, 6, 7, 8, 9, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 2~
+## $ zip  <dbl> 48504, 48507, 48504, 48507, 48505, 48507, 48507, 48503, 48507, 48~
+## $ ward <dbl> 6, 9, 1, 8, 3, 9, 9, 5, 9, 3, 9, 5, 2, 7, 9, 9, 5, 6, 2, 6, 1, 5,~
+## $ lead <dbl> 0.344, 8.133, 1.111, 8.007, 1.951, 7.200, 40.630, 1.100, 10.600, ~
+## $ draw <chr> "first", "first", "first", "first", "first", "first", "first", "f~
+\end{verbatim}
+
+\hypertarget{analysis}{%
+\subsection{Analysis}\label{analysis}}
+
+\hypertarget{part-1}{%
+\subsubsection{Part 1}\label{part-1}}
+
+Let's see how many samples were taken from each zip code.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint }\SpecialCharTok{\%\textgreater{}\%}               \CommentTok{\# data}
+  \FunctionTok{group\_by}\NormalTok{(zip) }\SpecialCharTok{\%\textgreater{}\%}     \CommentTok{\# perform a grouping by zip code}
+  \FunctionTok{count}\NormalTok{()               }\CommentTok{\# count occurrences}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 x 2
+## # Groups:   zip [8]
+##     zip     n
+##   <dbl> <int>
+## 1 48502     3
+## 2 48503   207
+## 3 48504   165
+## 4 48505   144
+## 5 48506   132
+## 6 48507   153
+## 7 48529     3
+## 8 48532     6
+\end{verbatim}
+
+48503 had the most samples drawn, at 207.
+
+\hypertarget{part-2}{%
+\subsubsection{Part 2}\label{part-2}}
+
+Next, let's look at the mean and median lead contaminant values for each
+zip code and draw combination. We have eight zip codes and samples taken
+at three times. How many combinations do we have?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(zip, draw) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_pb =} \FunctionTok{mean}\NormalTok{(lead))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'zip'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 24 x 3
+## # Groups:   zip [8]
+##      zip draw   mean_pb
+##    <dbl> <chr>    <dbl>
+##  1 48502 first     2.27
+##  2 48502 second    2.81
+##  3 48502 third     3.05
+##  4 48503 first    11.0 
+##  5 48503 second    5.66
+##  6 48503 third     3.77
+##  7 48504 first    13.2 
+##  8 48504 second   32.6 
+##  9 48504 third     5.13
+## 10 48505 first     6.09
+## # ... with 14 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(zip, draw) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{median\_pb =} \FunctionTok{median}\NormalTok{(lead))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'zip'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 24 x 3
+## # Groups:   zip [8]
+##      zip draw   median_pb
+##    <dbl> <chr>      <dbl>
+##  1 48502 first      2.27 
+##  2 48502 second     2.81 
+##  3 48502 third      3.05 
+##  4 48503 first      5.15 
+##  5 48503 second     2.47 
+##  6 48503 third      1.23 
+##  7 48504 first      2.83 
+##  8 48504 second     1.22 
+##  9 48504 third      0.744
+## 10 48505 first      3.32 
+## # ... with 14 more rows
+\end{verbatim}
+
+How many rows are in each of two above data frames? Each one has 24
+rows. This is from 8 * 3.
+
+\hypertarget{part-3}{%
+\subsubsection{Part 3}\label{part-3}}
+
+Modify the code below to compute the mean and median lead contaminant
+values for zip code 48503 at the first draw. What should you put in for
+\texttt{draw\ ==\ "\_\_\_\_\_"}? Don't forget to uncomment the second
+line of code.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(zip }\SpecialCharTok{==} \DecValTok{48503}\NormalTok{, draw }\SpecialCharTok{==} \StringTok{"first"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_pb =} \FunctionTok{mean}\NormalTok{(lead),}
+            \AttributeTok{median\_pb =} \FunctionTok{median}\NormalTok{(lead))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   mean_pb median_pb
+##     <dbl>     <dbl>
+## 1    11.0      5.15
+\end{verbatim}
+
+\hypertarget{part-4}{%
+\subsubsection{Part 4}\label{part-4}}
+
+Let's make some plots, where we will focus on zip codes 48503, 48504,
+48505, 48506, and 48507. We will restrict our attention to samples with
+lead values less than 1,000 ppb.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flint\_focus }\OtherTok{\textless{}{-}}\NormalTok{ flint }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(zip }\SpecialCharTok{\%in\%} \DecValTok{48503}\SpecialCharTok{:}\DecValTok{48507}\NormalTok{, lead }\SpecialCharTok{\textless{}} \DecValTok{1000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Below are side-by-side box plots for the three flushing times in each of
+the five zip codes we considered. Add \texttt{x} and \texttt{y} labels;
+add a title by inserting \texttt{title\ =\ "title\_name"} inside the
+\texttt{labs()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ flint\_focus, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{factor}\NormalTok{(zip), }\AttributeTok{y =}\NormalTok{ lead)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =} \FunctionTok{factor}\NormalTok{(draw))) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Zip Code"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Lead (ppb)"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Flint, MI Lead Content by Zip Code"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Flushing time"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_discrete}\NormalTok{(}\AttributeTok{breaks =} \FunctionTok{c}\NormalTok{(}\StringTok{"first"}\NormalTok{, }\StringTok{"second"}\NormalTok{, }\StringTok{"third"}\NormalTok{),}
+                      \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"0 (sec)"}\NormalTok{, }\StringTok{"45 (sec)"}\NormalTok{, }\StringTok{"120 (sec)"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{app-02-flint_files/figure-latex/plot1-1.pdf}
+
+Add labels for \texttt{x}, \texttt{y}, a \texttt{title}, and
+\texttt{subtitle} to the code below to update the corresponding plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ flint\_focus, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{factor}\NormalTok{(zip), }\AttributeTok{y =}\NormalTok{ lead)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =} \FunctionTok{factor}\NormalTok{(draw))) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Zip Code"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Lead (ppb)"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Flushing time"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"Measured in Parts per Billion"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Flint, MI Lead Content by Zip Code"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_discrete}\NormalTok{(}\AttributeTok{breaks =} \FunctionTok{c}\NormalTok{(}\StringTok{"first"}\NormalTok{, }\StringTok{"second"}\NormalTok{, }\StringTok{"third"}\NormalTok{),}
+                      \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"0 (sec)"}\NormalTok{, }\StringTok{"45 (sec)"}\NormalTok{, }\StringTok{"120 (sec)"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{(}\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{50}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{app-02-flint_files/figure-latex/plot2-1.pdf}
+
+What is the difference between the two plots? While the two plots
+contain the same data and graphs, the flipped y-axis (so the x-axis,
+ultimately) of the second graph is restricted to the range (0, 50) while
+there is no restriction of the range of the first graph beyond the cap
+below 1,000 created by the flint\_focus function.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Langkjaer-Bain, R. (2017). The murky tale of Flint's deceptive water
+  data. Significance, 14: 16-21.
+\end{enumerate}
+
+\end{document}

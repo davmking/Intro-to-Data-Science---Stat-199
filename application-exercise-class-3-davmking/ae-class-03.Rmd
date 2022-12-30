@@ -1,0 +1,401 @@
+---
+title: "Data Visualization I"
+author: "Dav King"
+date: "1-13-2021"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+# Main Ideas
+
+- Data visualization is an **extremely** effective way to express information 
+and extract meaning from data.
+- We can build up an effective visualization systematically layer by layer 
+using a grammar of graphics (`ggplot2`).
+
+# Coming Up
+
+- Lab 2 due Wednesday the 19th.
+- No Lab on Monday the 17th.
+
+"The simple graph has brought more information to the data analyst's mind than any other device" - John Tukey
+
+# Lecture Notes and Exercises
+
+## Reminder
+Before we start the exercise, we need to configure git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your GitHub username.
+
+Configure git by running the following code in the **terminal**. Fill in your GitHub username and the email address associated with your GitHub account.
+
+```{r, eval = FALSE}
+git config --global user.name 'username'
+git config --global user.email 'useremail'
+```
+
+Next load the `tidyverse` package. Recall, a package is just a bundle of 
+shareable code.
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+Exploratory data analysis (EDA) is an approach to analyzing datasets in order to summarize the main characteristics, often with visual representations of the  data (today). We can also calculate summary statistics and perform data  wrangling, manipulation, and transformation (next week).
+
+We will use `ggplot2` to construct visualizations. The gg in `ggplot2` stands  for "grammar of graphics", a system or framework that allows us to describe the components of a graphic, building up an effective visualization layer by later.
+
+## Minneapolis Housing Data
+
+We will introduce visualization using data on single-family homes sold in Minneapolis, Minnesota between 2005 and 2015.
+
+**Question:** What happens when you click the green arrow in the code chunk below? What changes in the "Environment" pane?
+
+The dataset "mn_homes" appears in the Environment, alongside a brief description
+of how many observations and variables the dataset has. The function itself
+reads the dataset from a csv file into R.
+
+```{r load-data, message = FALSE}
+mn_homes <- read_csv("mn_homes.csv")
+```
+
+```{r glimpse-data}
+glimpse(mn_homes)
+```
+
+**Question:** What does each row represent? Each column? 
+
+Each row represents individual houses, and their statistics across a number of
+different variables. Each column represents an individual variable on which
+different houses can be compared, such as sales price, number of bedrooms, or
+whether they have a fireplace.
+
+### First Visualization
+
+`ggplot` creates the initial base coordinate system that we will add layers  to. We first specify the dataset we will use with `data = mn_homes`. The `mapping` argument is paired with an aesthetic (`aes`), which tells us how the variables in our dataset should be mapped to the visual properties of the graph.
+
+**Question:** What does the code chunk below do?
+
+Iteratively, these three code chunks slowly build our graph into its relatively
+final state. The first chunk just greats the ggplot grid, telling it which
+dataset to read from and which variables to map onto the x and y axes. The
+second code chunk takes this, and adds the actual x-y scatterplot of the
+dataset. The third code chunk takes all of this and fits a loess regression line
+to the data.
+
+```{r base-layer}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice))
+```
+
+```{r add-points}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice)) + 
+   geom_point()
+```
+
+```{r add-smooth}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice)) + 
+   geom_point() + 
+   geom_smooth()
+```
+
+Run `?geom_smooth` in the console. What does this function do?
+
+This fits a loess regression line (moving regression) to the data. 
+
+```{r add-labels}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice)) + 
+   geom_point() + 
+   geom_smooth() +
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)")
+```
+
+The procedure used to construct plots can be summarized using the code below.
+
+```{r eval = FALSE}
+ggplot(data = [dataset], 
+       mapping = aes(x = [x-variable], y = [y-variable])) +
+   geom_xxx() +
+   geom_xxx() + 
+  other options
+```
+
+**Question:** What do you think `eval = FALSE` is doing in the code chunk above?
+
+`eval = FALSE` is telling that code chunk not to run, as it is filled with
+placeholder variables that will not actually do anything and thus evaluating it
+will generate nothing but error messages.
+
+
+## Aesthetics
+
+An aesthetic is a visual property of one of the objects in your plot.
+
+- shape
+- color
+- size
+- alpha (transparency)
+
+We can map a variable in our dataset to a color, a size, a transparency, and so on. The aesthetics that can be used with each `geom_` can be found in the documentation.
+
+**Question:** What will the visualization look like below? Write your answer 
+down before running the code.
+
+This is going to create a similar data plot to what we had before. It will build
+a scatterplot with area on the x axis and sales price on the y axis. It will
+add a title and labels for the axes, but it will nto create the loess regression
+line for the data. However, unlike before, this plot will have color. The data
+points will be colored based on whether the home had a fireplace or not, and it
+will use the viridis color scheme that is friendly to color-blind viewers.
+
+
+
+Here we are going to use the viridis package, which has more color-blind accessible colors. `scale_color_viridis` specifies which colors you want to use. You can learn more about the options [here](https://www.rdocumentation.org/packages/viridis/versions/0.5.1/topics/scale_color_viridis).
+
+Other sources that can be helpful in devising accessible color schemes include [Color Brewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3), the [Wes Anderson package](https://github.com/karthik/wesanderson), and the [cividis package](https://github.com/marcosci/cividis).
+
+This visualization shows a scatterplot of area (x variable) and sales price (y variable). Using the viridis function, we make points for houses with a fireplace yellow and those without purple. We also add axis and an overall label.
+
+```{r aesthetic-1}
+library(viridis)
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice,
+                     color = fireplace)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)") + 
+        scale_color_viridis(discrete=TRUE, option = "D", name="Fireplace?")
+```
+
+**Question:** What about this one?
+
+This will do almost the exact same thing as the graph before it did. However,
+instead of changing the color of the points based on whether the homes had a
+fireplace or not, it will leave all points black and instead change the *shape*
+of the points on that basis instead.
+
+```{r aesthetic-2}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice,
+                     shape = fireplace)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)",
+        shape="Fireplace?") 
+```
+
+**Question:** This one?
+
+Creating the same plot as the previous two examples, this plot will then color
+(using the viridis palate) by whether the homes had a fireplace or not, and
+scale the points by size according to how big the lot of the home was.
+
+```{r aesthetic-3}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice,
+                     color = fireplace,
+                     size = lotsize)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)", 
+        size = "Lot Size") +
+  scale_color_viridis(discrete=TRUE, option = "D",name="Fireplace?")
+```
+
+**Question:** Are the above visualizations effective? Why or why not? How might you improve them?
+
+While all are effective in some manner, some are better than others. The most
+effective visualization is the first one, which colors the points - it clearly
+shows which ones fall into the category of which variable. The second graph does
+not match this, as it's hard to see visually the difference between shapes.
+Similarly, the third one is difficult to read because adding the scale by lot
+size does not leave points that are particularly discernible from one another,
+adding clutter that does not add additional information to the graph.
+
+However, the first graph still has its limitations - even if viridis is built
+for colorblind readers, it still isn't necessarily readable to all of them.
+Additionally, if graphs were printed in black and white, the color would not
+help at all and would leave an uninterpretable graph. In order to make the most
+legible graph with those variables, instead of coloring according to fireplace,
+I would facet the grid into two columns along that variable instead - leaving
+two entirely separate, side-by-side plots of the data.
+
+**Question:** What is the difference between the two plots below?
+
+In the first plot, `color = "blue"` is included in the `aes` function, which
+means that the data points get colored in whatever the default color of the
+ggplot is, and that a legend is created which is titled "blue". In the second,
+`color = "blue"` is instead included in the `geom_point` function, which
+actually colors the points themselves instead of simply labeling a legend.
+
+```{r compare-plots}
+ggplot(data = mn_homes) + 
+  geom_point(mapping = aes(x = area, y = salesprice, color = "blue"))
+ggplot(data = mn_homes) + 
+  geom_point(mapping = aes(x = area, y = salesprice), color = "blue")
+```
+
+Use `aes` to map variables to plot features, use arguments in `geom_xxx` for customization not mapped to a variable.
+
+Mapping in the `ggplot` function is global, meaning they apply to every layer we add. Mapping in a particular `geom_xxx` function treats the mappings as local.
+
+**Question:** Create a scatterplot using variables of your choosing using the `mn_homes` data.
+
+```{r scatterplot}
+ggplot(data = mn_homes, 
+       mapping = aes(x = beds, y = baths)) + 
+   geom_point()
+```
+
+**Question:** Modify your scatterplot above by coloring the points for each community.
+
+```{r scatterplot-community}
+ggplot(data = mn_homes, 
+       mapping = aes(x = beds, y = baths,
+       color = community)) + 
+   geom_point() +
+  scale_color_viridis(discrete = TRUE, option = "D", name = "Community")
+```
+
+## Faceting
+
+We can use smaller plots to display different subsets of the data using  faceting. This is helpful to examine conditional relationships.
+
+Let's try a few simple examples of faceting. Note that these plots should be improved by careful consideration of labels, aesthetics, etc.
+
+```{r facet-1}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice, color = beds)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)",
+        subtitle = "Faceted by Number of Bedrooms") + 
+   facet_grid(. ~ beds) +
+  scale_color_viridis() +
+  guides(color = "none")
+  
+```
+
+```{r facet-2}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice, color = beds)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)",
+        subtitle = "Faceted by Number of Bedrooms") + 
+   facet_grid(beds ~ .) +
+  scale_color_viridis() +
+  guides(color = "none")
+```
+
+```{r facet-3}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice, color = beds)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)",
+        subtitle = "Faceted Horizontally by Bedrooms and Vertically by Bathrooms") + 
+   facet_grid(beds ~ baths) +
+  scale_color_viridis() +
+  guides(color = "none")
+```
+
+```{r facet-4}
+ggplot(data = mn_homes, 
+       mapping = aes(x = area, y = salesprice, color = community)) + 
+   geom_point() + 
+   labs(title = "Sales price vs. area of homes in Minneapolis, MN",
+        x = "Area (square feet)", y = "Sales Price (dollars)",
+        subtitle = "Faceted by Community") + 
+   facet_wrap(~ community) +
+  scale_color_viridis(discrete = TRUE) +
+  guides(color = "none")
+```
+
+`facet_grid()`
+
+- 2d grid
+- rows ~ cols
+- use . for no plot
+
+`facet_wrap()`
+
+- 1d ribbon wrapped into 2d
+
+## Practice
+
+(1) Modify the code outline to make the changes described below.
+
+- Change the color of the points to green.
+- Add `alpha` to make the points more transparent.
+- Add labels for the x axis, y axis, and the color of the points.
+- Add an informative title.
+- Consider using the `viridis` palette. (Note, you can't do all of these things at once in terms of color, these are just suggestions.) 
+
+When you are finished, remove `eval = FALSE` and knit the file to see the changes.
+
+Here is some starter code:
+
+```{r modify-scatterplot}
+ggplot(data = mn_homes, 
+       mapping = aes(x = lotsize, y = salesprice)) + 
+   geom_point(aes(color = "Green"), alpha = 0.3) + 
+   labs(title = "Sales Price vs Lot Size of Homes in Minneapolis, MN",
+        x = "Lot Size (Square Feet)", y = "Sales Price (Dollars)",
+        color = "Legend") +
+  scale_color_identity(guide = "legend")
+```
+
+(2) Modify the code outline to make the changes described below.
+
+- Create a histogram of `lotsize`.
+- Modify the histogram by adding `fill = "blue"` inside the `geom_histogram()`
+function. 
+- Modify the histogram by adding `color = "red"` inside the `geom_histogram()` function.
+
+When you are finished, remove `eval = FALSE` and knit the file to see the changes.
+
+```{r modify-histogram}
+ggplot(data = mn_homes, 
+       mapping = aes(x = lotsize)) +
+  geom_histogram(fill = "blue", color = "red") +
+  labs(title = "Histogram of Lot Size" , x = "Size of Lot", y = "Number of Homes")
+```
+
+**Question:** What is the difference between the `color` and `fill` arguments?
+
+Th `fill` argument provides a color that outlines the bars of the histogram,
+while the `color` argument fills the bars of the histogram.
+
+(3) Develop an effective visualization on your own using the code chunk provided below. Use three variables and at least one aesthetic mapping.
+
+```{r on-your-own, warning = FALSE}
+ggplot(data = mn_homes,
+       mapping = aes(x = beds, y = baths,
+                     size = salesprice, color = community)) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~ community) +
+  guides(color = "none") +
+  theme_bw() +
+  labs(title = "Bedrooms vs. Bathrooms in Houses Sold in Minneapolis, MN",
+       subtitle = "Scaled by Sales Price and Faceted by Community",
+       x = "Number of Bedrooms", y = "Number of Bathrooms",
+       size = "Sales Price")
+```
+
+### Additional Resources
+
+- https://ggplot2.tidyverse.org/
+- https://raw.githubusercontent.com/rstudio/cheatsheets/master/data-visualization-2.1.pdf
+- http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+- https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535
+- https://ggplot2-book.org/
+- https://ggplot2.tidyverse.org/reference/geom_histogram.html
+- https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+- https://github.com/GraphicsPrinciples/CheatSheet/blob/master/NVSCheatSheet.pdf

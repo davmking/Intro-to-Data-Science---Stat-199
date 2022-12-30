@@ -1,0 +1,884 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{AE 21: Multiple Regression, cont}
+\author{Dav King}
+\date{3/29/2022}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={AE 21: Multiple Regression, cont},
+  pdfauthor={Dav King},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{coming-up}{%
+\subsection{Coming up}\label{coming-up}}
+
+\begin{itemize}
+\tightlist
+\item
+  Peer Review Due Friday at 9 PM.
+\item
+  Exam 2 released on Friday morning, due next Tuesday at 11:59 PM.
+\item
+  There will not be lab on Monday next week or class on Tuesday.
+\end{itemize}
+
+\hypertarget{main-ideas}{%
+\subsection{Main ideas}\label{main-ideas}}
+
+\begin{itemize}
+\tightlist
+\item
+  Review and expand upon concepts from our first three regression
+  classes.
+\item
+  Learn how to carry out and interpret multiple linear regressions.
+\item
+  Learn how to assess the conditions for inference in regression.
+\end{itemize}
+
+\hypertarget{packages}{%
+\subsection{Packages}\label{packages}}
+
+We'll use the \texttt{tidyverse}, \texttt{broom},
+\texttt{fivethirtyeight}, and \texttt{viridis} packages again, as well
+as the \texttt{car} package when calculate variance inflation factors
+(VIFs) to examine whether our models have multicollinearity.
+
+\hypertarget{please-recall}{%
+\subsection{Please recall}\label{please-recall}}
+
+\begin{itemize}
+\item
+  Response Variable: Variable whose behavior or variation you are trying
+  to understand, on the y-axis. Also called the dependent variable.
+\item
+  Explanatory Variable: Other variables that you want to use to explain
+  the variation in the response, on the x-axis. Also called independent
+  variables, predictors, or features.
+\item
+  Predicted value: Output of the model function
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The model function gives the typical value of the response variable
+    conditioning on the explanatory variables (what does this mean?)
+  \end{itemize}
+\item
+  Residuals: Shows how far each case is from its predicted value
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Residual = Observed value - Predicted value
+  \item
+    Tells how far above/below the model function each case is
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{the-linear-model-with-a-single-predictor}{%
+\subsection{The linear model with a single
+predictor}\label{the-linear-model-with-a-single-predictor}}
+
+\begin{itemize}
+\tightlist
+\item
+  We're interested in the \(\beta_0\) (population parameter for the
+  intercept) and the \(\beta_1\) (population parameter for the slope) in
+  the following model:
+\end{itemize}
+
+\[ \hat{y} = \beta_0 + \beta_1~x + \epsilon \]
+
+\begin{itemize}
+\item
+  Unfortunately, we can't get these values
+\item
+  So we use sample statistics to estimate them:
+\end{itemize}
+
+\[ \hat{y} = b_0 + b_1~x \]
+
+\hypertarget{least-squares-regression}{%
+\subsection{Least squares regression}\label{least-squares-regression}}
+
+The regression line minimizes the sum of squared residuals.
+
+\begin{itemize}
+\item
+  \textbf{Residuals}: \(e_i = y_i - \hat{y}_i\),
+\item
+  The regression line minimizes \(\sum_{i = 1}^n e_i^2\).
+\item
+  Equivalently, minimizing \(\sum_{i = 1}^n [y_i - (b_0 + b_1~x_i)]^2\)
+\end{itemize}
+
+\hypertarget{data-a-closer-look}{%
+\subsection{Data: A Closer Look}\label{data-a-closer-look}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sports\_car\_prices }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"sportscars.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The file \texttt{sportscars.csv} contains prices for Porsche and Jaguar
+cars for sale on cars.com.
+
+\texttt{car}: car make (Jaguar or Porsche)
+
+\texttt{price}: price in USD
+
+\texttt{age}: age of the car in years
+
+\texttt{mileage}: previous miles driven
+
+\hypertarget{the-linear-model-with-a-single-predictor-1}{%
+\subsection{The linear model with a single
+predictor}\label{the-linear-model-with-a-single-predictor-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prices\_model }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{fit}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\FunctionTok{tidy}\NormalTok{(prices\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)   53246.     3322.     16.0  5.70e-23
+## 2 age           -2149.      466.     -4.62 2.22e- 5
+\end{verbatim}
+
+But is the age the only variable that predicts price?
+
+\hypertarget{the-linear-model-with-multiple-predictors}{%
+\subsection{The linear model with multiple
+predictors}\label{the-linear-model-with-multiple-predictors}}
+
+\[ \hat{y} = \beta_0 + \beta_1~x_1 + \beta_2~x_2 + \cdots + \beta_k~x_k +\epsilon \]
+
+\begin{itemize}
+\tightlist
+\item
+  Sample model that we use to estimate the population model:
+\end{itemize}
+
+\[ \hat{y} = b_0 + b_1~x_1 + b_2~x_2 + \cdots + b_k~x_k \]
+
+Let's add a variable.
+
+\hypertarget{price-vs.-age-and-type-of-car}{%
+\subsection{Price vs.~age and type of
+car}\label{price-vs.-age-and-type-of-car}}
+
+Does the relationship between price and age depend on type of car?
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{ae-21_files/figure-latex/plot1-1.pdf}
+
+\hypertarget{modeling-with-main-effects}{%
+\subsection{Modeling with main
+effects}\label{modeling-with-main-effects}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_main }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{fit}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ car, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\NormalTok{m\_main }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(term, estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+##   term        estimate
+##   <chr>          <dbl>
+## 1 (Intercept)   44310.
+## 2 age           -2487.
+## 3 carPorsche    21648.
+\end{verbatim}
+
+Linear model:
+
+\[ \widehat{price} = 44310 - 2487~age + 21648~carPorsche \]
+
+\begin{itemize}
+\item
+  Plug in 0 for \texttt{carPorsche} to get the linear model for Jaguars.
+\item
+  Plug in 1 for \texttt{carPorsche} to get the linear model for
+  Porsches.
+\item
+  Jaguar:
+\end{itemize}
+
+\[ \widehat{price} = 44310 - 2487~age + 21648* 0 \\
+=44310-2487*age\]
+
+\begin{itemize}
+\item
+  Porsche: \[ \widehat{price} = 44310 - 2487~age + 21648* 1 \\
+  =65958 - 2487~age\]
+\item
+  Rate of change in price as the age of the car increases does not
+  depend on make of car (same slopes)
+\item
+  Porsches are consistently more expensive than Jaguars (different
+  intercepts)
+\end{itemize}
+
+\hypertarget{interpretation-of-main-effects}{%
+\subsection{Interpretation of main
+effects}\label{interpretation-of-main-effects}}
+
+\includegraphics{ae-21_files/figure-latex/plot2-1.pdf}
+
+\hypertarget{main-effects-numerical-and-categorical-predictors}{%
+\subsection{Main effects, numerical and categorical
+predictors}\label{main-effects-numerical-and-categorical-predictors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_main }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(term, estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+##   term        estimate
+##   <chr>          <dbl>
+## 1 (Intercept)   44310.
+## 2 age           -2487.
+## 3 carPorsche    21648.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_main\_coefs }\OtherTok{\textless{}{-}}\NormalTok{ m\_main }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(term, estimate)}
+\NormalTok{m\_main\_coefs}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+##   term        estimate
+##   <chr>          <dbl>
+## 1 (Intercept)   44310.
+## 2 age           -2487.
+## 3 carPorsche    21648.
+\end{verbatim}
+
+\begin{itemize}
+\item
+  \textbf{All else held constant}, for each additional year of a car's
+  age, the price of the car is predicted to decrease, on average, by
+  \$2,487.
+\item
+  \textbf{All else held constant}, Porsches are predicted, on average,
+  to have a price that is \$21,648 greater than Jaguars.
+\item
+  Jaguars that have an age of 0 are predicted, on average, to have a
+  price of \$44,310.
+\end{itemize}
+
+\hypertarget{what-went-wrong}{%
+\subsection{What went wrong?}\label{what-went-wrong}}
+
+\textbf{Question}: Why is our linear regression model different from
+what we got from \texttt{geom\_smooth(method\ =\ "lm")}?
+
+\begin{itemize}
+\item
+  \texttt{car} is the only variable in our model that affects the
+  intercept.
+\item
+  The model we specified assumes Jaguars and Porsches have the
+  \textbf{same slope} and \textbf{different intercepts}.
+\item
+  What is the most appropriate model for these data?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    same slope and intercept for Jaguars and Porsches?
+  \item
+    same slope and different intercept for Jaguars and Porsches?
+  \item
+    different slope and different intercept for Jaguars and Porsches?
+  \end{itemize}
+\end{itemize}
+
+Different slope and different intercepts is the most appropriate model.
+
+\hypertarget{interacting-explanatory-variables}{%
+\subsection{Interacting explanatory
+variables}\label{interacting-explanatory-variables}}
+
+\begin{itemize}
+\item
+  Including an interaction effect in the model allows for different
+  slopes, i.e.~ nonparallel lines.
+\item
+  This means that the relationship between an explanatory variable and
+  the response depends on another explanatory variable.
+\item
+  We can accomplish this by adding an \textbf{interaction variable}.
+  This is the product of two explanatory variables (also sometimes
+  called an interaction term).
+\end{itemize}
+
+\hypertarget{modeling-with-interaction-effects}{%
+\subsection{Modeling with interaction
+effects}\label{modeling-with-interaction-effects}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sports\_car\_prices, }
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ age, }\AttributeTok{y =}\NormalTok{ price, }\AttributeTok{color =}\NormalTok{ car)) }\SpecialCharTok{+} 
+    \FunctionTok{scale\_color\_viridis}\NormalTok{(}\AttributeTok{discrete =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{option =} \StringTok{"D"}\NormalTok{, }\AttributeTok{name =} \StringTok{"Type of Car"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Age (years)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Price (USD)"}\NormalTok{, }\AttributeTok{color =} \StringTok{"Car Make"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method=}\StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{ae-21_files/figure-latex/interactingplot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ m\_int }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{fit}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ car }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{*}\NormalTok{ car, }
+            \AttributeTok{data =}\NormalTok{ sports\_car\_prices) }
+\NormalTok{m\_int }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(term, estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 2
+##   term           estimate
+##   <chr>             <dbl>
+## 1 (Intercept)      56988.
+## 2 age              -5040.
+## 3 carPorsche        6387.
+## 4 age:carPorsche    2969.
+\end{verbatim}
+
+\[\widehat{price} = 56988 - 5040~age + 6387~carPorsche + 2969~age \times carPorsche\]
+
+\hypertarget{interpretation-of-interaction-effects}{%
+\subsection{Interpretation of interaction
+effects}\label{interpretation-of-interaction-effects}}
+
+\[\widehat{price} = 56988 - 5040~age + 6387~carPorsche + 2969~age \times carPorsche\]
+
+\begin{itemize}
+\item
+  Plug in 0 for \texttt{carPorsche} to get the linear model for Jaguars.
+\item
+  Plug in 1 for \texttt{carPorsche} to get the linear model for
+  Porsches.
+\item
+  Jaguar:
+\end{itemize}
+
+\[\begin{align}\widehat{price} &= 56988 - 5040~age + 6387~carPorsche + 2969~age \times carPorsche \\
+&= 56988 - 5040~age + 6387 \times 0 + 2969~age \times 0\\
+&= 56988 - 5040~age\end{align}\]
+
+\begin{itemize}
+\tightlist
+\item
+  Porsche:
+\end{itemize}
+
+\[\begin{align}\widehat{price} &= 56988 - 5040~age + 6387~carPorsche + 2969~age \times carPorsche \\
+&= 56988 - 5040~age + 6387 \times 1 + 2969~age \times 1\\
+&= 63375 - 2071~age\end{align}\]
+
+\hypertarget{interpretation-of-interaction-effects-1}{%
+\subsection{Interpretation of interaction
+effects}\label{interpretation-of-interaction-effects-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  Jaguar:
+\end{itemize}
+
+\[\widehat{price} = 56988 - 5040~age\]
+
+\begin{itemize}
+\tightlist
+\item
+  Porsche:
+\end{itemize}
+
+\[\widehat{price} = 63375 - 2071~age\]
+
+\begin{itemize}
+\item
+  Rate of change in price as the age of the car increases depends on the
+  make of the car (different slopes).
+\item
+  Porsches are consistently more expensive than Jaguars (different
+  intercepts).
+\end{itemize}
+
+\hypertarget{continuous-by-continuous-interactions}{%
+\subsection{Continuous by continuous
+interactions}\label{continuous-by-continuous-interactions}}
+
+\begin{itemize}
+\item
+  Interpretation becomes trickier
+\item
+  Slopes conditional on values of explanatory variables
+\end{itemize}
+
+\hypertarget{third-order-interactions}{%
+\subsection{Third order interactions}\label{third-order-interactions}}
+
+\begin{itemize}
+\item
+  Can you? Yes
+\item
+  Should you? Probably not if you want to interpret these interactions
+  in context of the data.
+\end{itemize}
+
+\hypertarget{multicollinearity}{%
+\subsection{Multicollinearity}\label{multicollinearity}}
+
+You don't want the predictors to be too correlated with each other in a
+multiple regression model. When they are correlated with each other, you
+have \textbf{mutlicollinearity}. One way to diagnose multicollinearity
+is with \textbf{variance inflation factors.} There's no specific cutoff,
+but a VIF of 10 if sometimes used as a cutoff.
+
+Let's see if we have multicollinearity in our first model. (Please do
+not run linear regressions this way on the exam, I'm doing it this way
+to demonstrate with \texttt{car}.)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_main\_2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ car, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\FunctionTok{tibble}\NormalTok{(}\FunctionTok{vif}\NormalTok{(m\_main\_2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 1
+##   `vif(m_main_2)`
+##             <dbl>
+## 1            1.02
+## 2            1.02
+\end{verbatim}
+
+Now, let's check if for the interactive model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m\_int\_2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ car }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{*}\NormalTok{ car, }
+            \AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\FunctionTok{tibble}\NormalTok{(}\FunctionTok{vif}\NormalTok{(m\_int\_2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 1
+##   `vif(m_int_2)`
+##            <dbl>
+## 1           7.27
+## 2           3.85
+## 3          11.2
+\end{verbatim}
+
+Notice the VIFs here are higher. This is to be expected with an
+interactive model.
+
+\textbf{Question}: Why do you think VIFs will be higher in interactive
+models?
+
+Yes- this is because the interaction terms are made up of the other
+variables. So, they are likely to correlate with them. This is normal.
+
+\hypertarget{p-hacking}{%
+\subsection{P-Hacking}\label{p-hacking}}
+
+Let's return to the candy rankings data:
+
+Notice below that our p-value for the sugar percentile variable is
+\textbf{REALLY CLOSE} to 0.05. While arbitrary, this threshold is
+important in statistics and is sometimes used as the cutoff to determine
+whether results are publishable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{candy\_rankings }\OtherTok{\textless{}{-}}\NormalTok{ candy\_rankings }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{sugarpercent100 =}\NormalTok{ sugarpercent }\SpecialCharTok{*} \DecValTok{100}\NormalTok{)}
+\NormalTok{candy }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{fit}\NormalTok{(winpercent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sugarpercent100 }\SpecialCharTok{+}\NormalTok{ chocolate, }\AttributeTok{data =}\NormalTok{ candy\_rankings) }
+\FunctionTok{tidy}\NormalTok{(candy)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 5
+##   term            estimate std.error statistic  p.value
+##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)      38.3       2.55       15.0  3.31e-25
+## 2 sugarpercent100   0.0857    0.0435      1.97 5.25e- 2
+## 3 chocolateTRUE    18.3       2.47        7.40 1.06e-10
+\end{verbatim}
+
+\href{https://projects.fivethirtyeight.com/p-hacking}{FiveThirtyEight}
+has a interactive page showing how you can p-hack your way to
+publication.
+
+How could we p-hack our way to a significant result for the sugar
+variable?
+
+Try adding the variable for whether the variable is a hard candy.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hard\_candy }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{fit}\NormalTok{(winpercent }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sugarpercent100 }\SpecialCharTok{+}\NormalTok{ chocolate }\SpecialCharTok{+}\NormalTok{ hard, }\AttributeTok{data =}\NormalTok{ candy\_rankings)}
+\FunctionTok{tidy}\NormalTok{(hard\_candy)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   term            estimate std.error statistic  p.value
+##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)      39.3       2.64       14.9  6.05e-25
+## 2 sugarpercent100   0.0944    0.0437      2.16 3.36e- 2
+## 3 chocolateTRUE    16.9       2.63        6.44 7.98e- 9
+## 4 hardTRUE         -4.98      3.41       -1.46 1.48e- 1
+\end{verbatim}
+
+We now have statistically significant results for our main variable of
+interest! But there are some data ethics issues with this approach.
+
+\textbf{Question}: Why is p-hacking problematic?
+
+This can result in you getting statistically significant results when
+you may not actually have them, increasing the probability of a Type 1
+Error, among other concerns.
+
+\hypertarget{practice}{%
+\subsection{Practice}\label{practice}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Run and interpret a multiple regression with both age and mileage as
+  predictors. Are both of these statistically significant predictors of
+  the price of a car?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age\_mile }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{fit}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ mileage, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\CommentTok{\#note that the instructions did not say to examine interaction effects, but }
+\CommentTok{\#see below.}
+\FunctionTok{tidy}\NormalTok{(age\_mile)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 5
+##   term         estimate std.error statistic  p.value
+##   <chr>           <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept) 62950.     3176.       19.8   3.03e-27
+## 2 age           516.      601.        0.859 3.94e- 1
+## 3 mileage        -0.695     0.122    -5.68  4.75e- 7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age\_mile\_interact }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{fit}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{*}\NormalTok{ mileage, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\FunctionTok{tidy}\NormalTok{(age\_mile\_interact)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   term          estimate std.error statistic  p.value
+##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept) 70809.     4441.         15.9  1.78e-22
+## 2 age         -1807.     1115.         -1.62 1.11e- 1
+## 3 mileage        -0.808     0.126      -6.40 3.35e- 8
+## 4 age:mileage     0.0334    0.0137      2.43 1.82e- 2
+\end{verbatim}
+
+Slopes: For main interaction effects: for each year of age, we predict a
+\$516 increase in price. For each additional mile on the car, we predict
+a decrease of \$0.695 in price.
+
+Intercept: We expect a car with zero years of age and zero miles to cost
+\$62950.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  (To Review) Find and interpret the adjusted \(R^2\) for this model.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glance}\NormalTok{(age\_mile)}\SpecialCharTok{$}\NormalTok{adj.r.squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5167014
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glance}\NormalTok{(age\_mile\_interact)}\SpecialCharTok{$}\NormalTok{adj.r.squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5550869
+\end{verbatim}
+
+51.7\% of the variance in car price can be explained by its age and
+mileage, and 55.5\% of that same variance can be explained by the
+interaction of its age and mileage. This also suggests that including
+the interaction effects makes for a more effective model of car price.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Examine the extent to which there is multicollinearity in this model.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age\_mile\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ mileage, }\AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\NormalTok{age\_mile\_interact\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ mileage }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{*}\NormalTok{ mileage,}
+                           \AttributeTok{data =}\NormalTok{ sports\_car\_prices)}
+\FunctionTok{vif}\NormalTok{(age\_mile\_lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      age  mileage 
+## 2.562603 2.562603
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vif}\NormalTok{(age\_mile\_interact\_lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         age     mileage age:mileage 
+##    9.594751    2.967861   11.073879
+\end{verbatim}
+
+There is a fair bit of multicollinearity in this model, which is to be
+expected.
+
+Now, please turn to the dataset in \texttt{nycairquality.csv}. This file
+contains daily air quality measurements in New York from May to
+September 1973 and collected by the New York State Department of
+Conservation and the National Weather Service (Chambers, J. M.,
+Cleveland, W. S., Kleiner, B. and Tukey, P. A. (1983) \emph{Graphical
+Methods for Data Analysis}. Belmont, CA: Wadsworth).
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Ozone}: ozone (ppb)
+\item
+  \texttt{Solar.R}: solar radiation (langleys)
+\item
+  \texttt{Wind}: wind (mph)
+\item
+  \texttt{Temp}: temperature (degrees F)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{airquality }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"airquality.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Please run and interpret a model with ozone in parts per billion as
+  the response variable and solar radiation, wind, and temperature as
+  the explanatory variables.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ozone\_model }\OtherTok{\textless{}{-}} \FunctionTok{linear\_reg}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{set\_engine}\NormalTok{(}\StringTok{"lm"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{fit}\NormalTok{(Ozone }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Solar.R }\SpecialCharTok{+}\NormalTok{ Wind }\SpecialCharTok{+}\NormalTok{ Temp, }\AttributeTok{data =}\NormalTok{ airquality)}
+\FunctionTok{tidy}\NormalTok{(ozone\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   term        estimate std.error statistic       p.value
+##   <chr>          <dbl>     <dbl>     <dbl>         <dbl>
+## 1 (Intercept) -64.3      23.1        -2.79 0.00623      
+## 2 Solar.R       0.0598    0.0232      2.58 0.0112       
+## 3 Wind         -3.33      0.654      -5.09 0.00000152   
+## 4 Temp          1.65      0.254       6.52 0.00000000242
+\end{verbatim}
+
+Slopes: For each unit increase in solar radiation, we predict an
+increase of 0.0598 parts per billion ozone. For each additional mile per
+hour of wind, we predict a decrease of -3.33 parts per billion ozone.
+For each Fahrenheit degree of temperature, we predict an increase of
+1.65 parts per billion ozone.
+
+Intercept: With zero solar radiation, zero wind, and at zero degrees
+Fahrenheit, we predict -64.3 parts per billion ozone.
+
+\end{document}
